@@ -146,6 +146,14 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'name' => '"vardas"',
+        'runs' => '"dalyvavo lėnktynėse"',
+        'wins' => '"iš jų laimėjo"',
+        'about' => '"aprašymas apie žirgą"',
+        'surname' => '"pavardė"',
+        'bet' => '"statoma suma"',
+        'horse_id' => '"pasirinktas arklys"',
+    ],
 
 ];

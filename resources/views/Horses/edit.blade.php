@@ -6,8 +6,18 @@
             <div class="card">
                 <div class="card-header">Pakeisti informacija apie arklį: </div>
                 <div class="card-body">
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
                     <form method="POST" action="{{ route('horses.update', $horse->id) }}">
-                        @csrf @method("PUT")
+                        @csrf 
+                        @method("PUT")
                         <div class="form-group">
                             <label for="">Vardas: </label>
                             <input type="text" name="name" class="form-control" value="{{ $horse->name }}">

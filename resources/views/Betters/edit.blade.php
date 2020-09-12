@@ -7,8 +7,19 @@
                 <div class="card-header">Pakeisti informacija apie lažybininką: </div>
                 <div class="card-body">
                     <form method="POST" action="{{ route('betters.update', $better->id) }}">
-                        @csrf @method("PUT")
-                        <div class="form-group">
+                        @csrf 
+                        @method("PUT")
+                            <div class="form-group">
+                                @if ($errors->any())
+                                <div class="alert alert-danger">
+                                    <strong>Whoops!</strong>
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
                             <label for="">Vardas: </label>
                             <input type="text" name="name" class="form-control" value="{{ $better->name }}">
                         </div>

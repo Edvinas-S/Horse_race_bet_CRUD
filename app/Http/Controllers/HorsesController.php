@@ -14,7 +14,8 @@ class HorsesController extends Controller
      */
     public function index()
     {
-        return view('horses.index', ['horses' => Horses::orderBy('name')->get()]);
+        $horses = Horses::orderBy('name')->get();
+        return view('horses.index', compact('horses'));
     }
 
     /**
@@ -35,11 +36,23 @@ class HorsesController extends Controller
      */
     public function store(Request $request)
     {
-        $horse = new Horses();
-        // var_dump($request->all()); die();
-        $horse->fill($request->all());
+        $request->validate([
+            'name'=>'required',
+            'runs'=>'required',
+            'wins'=>'required',
+            'about'=>'required'
+        ]);
+
+        $horse = new Horses([
+            'name'=> $request->get('name'),
+            'runs'=> $request->get('runs'),
+            'wins'=> $request->get('wins'),
+            'about'=> $request->get('about')
+        ]);
+
         $horse->save();
-        return redirect()->route('horses.index');
+
+        return redirect('/horses')->with('success', 'Pridėtas naujas žirgas');
     }
 
     /**
@@ -59,9 +72,10 @@ class HorsesController extends Controller
      * @param  \App\Models\Horses  $horses
      * @return \Illuminate\Http\Response
      */
-    public function edit(Horses $horse)
+    public function edit($id)
     {
-        return view('horses.edit', ['horse' => $horse]);
+        $horse = Horses::find($id);
+        return view('horses.edit', compact('horse'));
     }
 
     /**
@@ -71,11 +85,25 @@ class HorsesController extends Controller
      * @param  \App\Models\Horses  $horses
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Horses $horse)
+    public function update(Request $request, $id)
     {
-        $horse->fill($request->all());
+        $request->validate([
+            'name'=>'required',
+            'runs'=>'required',
+            'wins'=>'required',
+            'about'=>'required'
+        ]);
+
+        $horse = Horses::find($id);
+
+        $horse->name = $request->get('name');
+        $horse->runs = $request->get('runs');
+        $horse->wins = $request->get('wins');
+        $horse->about = $request->get('about');
+
         $horse->save();
-        return redirect()->route('horses.index'); 
+
+        return redirect('/horses')->with('success', 'Žirgo informacija atnaujinta!'); 
     }
 
     /**
@@ -84,9 +112,12 @@ class HorsesController extends Controller
      * @param  \App\Models\Horses  $horses
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Horses $horse)
+    public function destroy($id)
     {
+        $horse = Horses::find($id);
         $horse->delete();
-        return redirect()->route('horses.index');
+
+        return redirect('/horses')->with('success', 'Žirgas ištrintas iš sąrašo!');
     }
+    
 }

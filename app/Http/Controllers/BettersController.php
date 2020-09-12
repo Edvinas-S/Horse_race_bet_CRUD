@@ -13,9 +13,9 @@ class BettersController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        $betters = Betters::orderBy('bet')->get();
-        return view('betters.index', ['betters' => $betters]);
+    {   
+        $betters = Betters::orderBy('bet', 'DESC')->get();
+        return view('betters.index', compact('betters'));
     }
 
     /**
@@ -26,7 +26,8 @@ class BettersController extends Controller
     public function create()
     {
         $horses = \App\Horses::orderBy('name')->get();
-        return view('betters.create', ['horses' => $horses]);
+
+        return view('betters.create', compact('horses'));
     }
 
     /**
@@ -37,11 +38,23 @@ class BettersController extends Controller
      */
     public function store(Request $request)
     {
-        $better = new Betters();
-        // var_dump($request->all()); die();
-        $better->fill($request->all());
+        $request->validate([
+            'name'=>'required',
+            'surname'=>'required',
+            'bet'=>'required',
+            'horse_id'=>'required'
+        ]);
+
+        $better = new Betters([
+            'name'=> $request->get('name'),
+            'surname'=> $request->get('surname'),
+            'bet'=> $request->get('bet'),
+            'horse_id'=> $request->get('horse_id')
+        ]);
+
         $better->save();
-        return redirect()->route('betters.index');
+
+        return redirect('/betters')->with('success', 'Pridėtas naujas lažybininkas');
     }
 
     /**
@@ -61,10 +74,12 @@ class BettersController extends Controller
      * @param  \App\Betters  $betters
      * @return \Illuminate\Http\Response
      */
-    public function edit(Betters $better)
+    public function edit($id)
     {
         $horses = \App\Horses::orderBy('name')->get();
-        return view('betters.edit', ['better' => $better, 'horses' => $horses]);
+
+        $better = Betters::find($id);
+        return view('betters.edit', compact('better'), compact('horses'));
     }
 
     /**
@@ -74,11 +89,25 @@ class BettersController extends Controller
      * @param  \App\Betters  $betters
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Betters $better)
+    public function update(Request $request, $id)
     {
-        $better->fill($request->all());
+        $request->validate([
+            'name'=>'required',
+            'surname'=>'required',
+            'bet'=>'required',
+            'horse_id'=>'required'
+        ]);
+
+        $better = Betters::find($id);
+
+        $better->name = $request->get('name');
+        $better->surname = $request->get('surname');
+        $better->bet = $request->get('bet');
+        $better->horse_id = $request->get('horse_id');
+
         $better->save();
-        return redirect()->route('betters.index'); 
+
+        return redirect('/betters')->with('success', 'Lažybininko informacija atnaujinta!'); 
     }
 
     /**
@@ -87,9 +116,12 @@ class BettersController extends Controller
      * @param  \App\Betters  $betters
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Betters $better)
+    public function destroy($id)
     {
+        $better = Betters::find($id);
         $better->delete();
-        return redirect()->route('betters.index');
+
+        return redirect('/betters')->with('success', 'Lažybininkas ištrintas iš sąrašo!');
     }
+
 }
