@@ -13,6 +13,6 @@ class Horses extends Model
         'about'];
 
     public function betters(){
-        return $this->hasMany('App\Betters');
+        return $this->hasMany('App\Betters', 'horse_id', 'id');
     }
 }

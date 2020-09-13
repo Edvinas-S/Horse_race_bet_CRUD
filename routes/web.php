@@ -21,6 +21,6 @@ Route::get('/', function () {
 Route::resource('horses', 'HorsesController');
 Route::resource('betters', 'BettersController');
 
-Auth::routes();
+Auth::routes(['register'=>false]);
 
 Route::get('/home', 'HomeController@index')->name('home');

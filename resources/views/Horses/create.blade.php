@@ -1,3 +1,4 @@
+@auth
 @extends('layouts.app')
 @section('content')
 <div class="container">
@@ -24,11 +25,11 @@
                         </div>
                         <div class="form-group">
                             <label>Dalyvavo lėnktynėse: </label>
-                            <input type="number" name="runs" class="form-control" value="{{old('runs')}}"> 
+                            <input type="number" name="runs" class="form-control" value="{{old('runs')}}" max="127"> 
                         </div>
                         <div class="form-group">
                         <label>Iš jų laimėjo: </label>
-                        <input type="number" name="wins" class="form-control" value="{{old('wins')}}"> 
+                        <input type="number" name="wins" class="form-control" value="{{old('wins')}}" max="127"> 
                     </div>
                         <div class="form-group">
                             <label>Aprašymas apie žirgą: </label>
@@ -42,3 +43,4 @@
     </div>
 </div>
 @endsection
+@endauth

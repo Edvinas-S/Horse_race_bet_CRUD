@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Betters;
+use App\Horses;
 use Illuminate\Http\Request;
 
 class BettersController extends Controller
@@ -12,10 +13,16 @@ class BettersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {   
-        $betters = Betters::orderBy('bet', 'DESC')->get();
-        return view('betters.index', compact('betters'));
+        if(isset($request->horse_id) && $request->horse_id != 0) {
+            $betters = Betters::where('horse_id', $request->horse_id)->orderBy('bet','DESC')->get();
+        } else {
+            $betters = Betters::orderBy('bet', 'DESC')->get();
+        }
+        
+        $horses = Horses::orderBy('name')->get();
+        return view('betters.index', compact('betters'), compact('horses'));
     }
 
     /**

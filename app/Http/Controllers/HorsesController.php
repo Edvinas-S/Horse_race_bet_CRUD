@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Horses;
 use Illuminate\Http\Request;
+use Illuminate\Database\QueryException;
 
 class HorsesController extends Controller
 {
@@ -114,10 +115,14 @@ class HorsesController extends Controller
      */
     public function destroy($id)
     {
-        $horse = Horses::find($id);
-        $horse->delete();
-
+        try {
+            $horse = Horses::find($id);
+            $horse->delete();
+        }
+        catch (QueryException $e) {
+            return redirect('/horses')->with('error', 'Negali būti ištrintas! Nes turi aktyvių lažybininkų!');
+        }
         return redirect('/horses')->with('success', 'Žirgas ištrintas iš sąrašo!');
     }
-    
+
 }

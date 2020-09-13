@@ -13,6 +13,6 @@ class Betters extends Model
         'horse_id'];
 
     public function horses(){
-        return $this->belongsTo('App\Horses', 'horse_id');
+        return $this->belongsTo('App\Horses', 'horse_id', 'id');
     }
 }
