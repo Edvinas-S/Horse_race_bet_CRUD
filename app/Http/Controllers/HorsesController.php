@@ -40,7 +40,7 @@ class HorsesController extends Controller
         $request->validate([
             'name'=>'required',
             'runs'=>'required',
-            'wins'=>'required',
+            'wins'=>['required', 'numeric', 'min:0', 'lte:runs'],
             'about'=>'required'
         ]);
 
@@ -91,7 +91,7 @@ class HorsesController extends Controller
         $request->validate([
             'name'=>'required',
             'runs'=>'required',
-            'wins'=>'required',
+            'wins'=>['required', 'numeric', 'min:0', 'lte:runs'],
             'about'=>'required'
         ]);
 
